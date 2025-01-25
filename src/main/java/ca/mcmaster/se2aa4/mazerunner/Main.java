@@ -13,22 +13,33 @@ public class Main {
     public static void main(String[] args) {
         logger.info("** Starting Maze Runner");
         try {
-            if(args[0].equals("-i")) {
+            if(args.length == 2 && args[0].equals("-i")) {
                 logger.info("**** Reading the maze from file " + args[1]);
                 BufferedReader reader = new BufferedReader(new FileReader(args[1]));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                for (int idx = 0; idx < line.length(); idx++) {
-                    if (line.charAt(idx) == '#') {
-                        logger.trace("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
-                        logger.trace("PASS ");
+                    StringBuilder rowLog = new StringBuilder();
+                    for (int idx = 0; idx < line.length(); idx++) {
+                        if (line.charAt(idx) == '#') {
+                            System.out.print("WALL ");
+                        } else if (line.charAt(idx) == ' ') {
+                            System.out.print("PASS ");
+                        }
                     }
+                    System.out.print(System.lineSeparator());
                 }
-                logger.trace(System.lineSeparator());
+            } 
+            else if (args.length == 4 && args[0].equals("-i") && args[2].equals("-p")) {
+                logger.info("**** Reading the maze from file " + args[1]);
+                MazeWalker walker = new MazeWalker(args[1]);
+                if (walker.validatePath(args[3])) {
+                    System.out.println("correct path");
                 }
-            } else {
-                logger.warn("Usage: '-i' 'text file'");
+                else {
+                    System.out.println("incorrect path");
+                }
+            }else {
+                logger.warn("Usage: '-i' 'text file' and/or '-p' 'path'");
             }
         } catch(Exception e) {
             logger.error("/!\\ An error has occured /!\\");
