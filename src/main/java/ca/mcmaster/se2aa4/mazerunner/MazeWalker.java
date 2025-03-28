@@ -8,8 +8,8 @@ import java.util.List;
 
 public class MazeWalker {
     private char[][] maze;
-    private int startRow = -1;
-    private int endRow = -1;
+    protected int startRow = -1;
+    protected int endRow = -1;
     private final Solver solver;
 
     public MazeWalker(String filePath, Solver solver) {
@@ -53,7 +53,7 @@ public class MazeWalker {
         }
     }
     
-    private void findStartAndEndPoints() {
+    protected void findStartAndEndPoints() {
         for (int i = 0; i < maze.length; i++) {
             if (maze[i].length > 0 && maze[i][0] == ' ') { // Check the first column for a gap
                 startRow = i;
@@ -73,7 +73,7 @@ public class MazeWalker {
         return factorizePath(String.join("", path));
     }
 
-    private String factorizePath(String path) {
+    protected String factorizePath(String path) {
         if (path == null || path.isEmpty()) {
             return "";
         }
@@ -145,7 +145,7 @@ public class MazeWalker {
         return currentPosition.equalsEachOther(finalPosition);
     }
 
-    private boolean isValid(Position pos) {
+    protected boolean isValid(Position pos) {
         if (pos.row < 0 || pos.row >= maze.length || pos.col < 0 || pos.col >= maze[0].length) {
             return false;
         }

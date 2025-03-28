@@ -43,6 +43,11 @@ public class RightHandSolver implements Solver {
                 turnAround();
             }
         }
+
+        if (!current.equalsEachOther(end)) {
+            return new ArrayList<>(); // return empty path on failure
+        }
+        
         return path;
     }
 

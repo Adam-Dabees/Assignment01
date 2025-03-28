@@ -26,6 +26,13 @@
       <artifactId>commons-cli</artifactId>
       <version>1.6.0</version>
     </dependency>
+    
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.10.0</version>
+        <scope>test</scope>
+      </dependency>
     <!-- To support Logging through Log4J-->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
