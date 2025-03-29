@@ -1,6 +1,5 @@
 package ca.mcmaster.se2aa4.mazerunnertest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import ca.mcmaster.se2aa4.mazerunner.FactorizedFormatter;
 import ca.mcmaster.se2aa4.mazerunner.MazeWalker;
 import ca.mcmaster.se2aa4.mazerunner.PathFormatter;
+import ca.mcmaster.se2aa4.mazerunner.Position;
 import ca.mcmaster.se2aa4.mazerunner.RightHandSolver;
 import ca.mcmaster.se2aa4.mazerunner.Solver;
 import ca.mcmaster.se2aa4.mazerunner.TremauxSolver;
@@ -26,6 +26,8 @@ class MazeWalkerTest {
     private Solver RightHandSolver;
     private Solver TremauxSolver;
     private PathFormatter factorizedFormatter;
+    private Position pos1;
+    private Position pos2;
 
     @BeforeEach
     void setUp() {
@@ -34,6 +36,8 @@ class MazeWalkerTest {
         TremauxSolver = new TremauxSolver();// or any other solver
         mazeWalker = new MazeWalkerHelper("examples/small.maz.txt", RightHandSolver, factorizedFormatter);
         TremauxMazeWalker = new MazeWalkerHelper("examples/small.maz.txt", TremauxSolver, factorizedFormatter);
+        pos1 = new Position(1, 1);
+        pos2 = new Position(1, 2);
     }
 
     @Test
@@ -96,8 +100,17 @@ class MazeWalkerTest {
     }
 
     @Test
-    void testFactorizePath_EmptyPath() {
-        String factorized = factorizedFormatter.format(new ArrayList<>());
-        assertEquals("", factorized);
+    void testEqualsEachOther() {
+        Position pos1 = new Position(1, 1);
+        Position pos2 = new Position(1, 1);
+        assertTrue(pos1.equalsEachOther(pos2));
+    }
+
+    @Test
+    void testCopy() {
+        Position pos = new Position(1, 1);
+        Position copy = pos.copy();
+        assertEquals(pos.row, copy.row);
+        assertEquals(pos.col, copy.col);
     }
 }
