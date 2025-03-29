@@ -1,5 +1,9 @@
 package ca.mcmaster.se2aa4.mazerunnertest;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -9,7 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ca.mcmaster.se2aa4.mazerunner.FactorizedFormatter;
 import ca.mcmaster.se2aa4.mazerunner.MazeWalker;
+import ca.mcmaster.se2aa4.mazerunner.PathFormatter;
 import ca.mcmaster.se2aa4.mazerunner.RightHandSolver;
 import ca.mcmaster.se2aa4.mazerunner.Solver;
 import ca.mcmaster.se2aa4.mazerunner.TremauxSolver;
@@ -19,13 +25,15 @@ class MazeWalkerTest {
     private MazeWalkerHelper TremauxMazeWalker;
     private Solver RightHandSolver;
     private Solver TremauxSolver;
+    private PathFormatter factorizedFormatter;
 
     @BeforeEach
     void setUp() {
+        factorizedFormatter = new FactorizedFormatter();
         RightHandSolver = new RightHandSolver();
         TremauxSolver = new TremauxSolver();// or any other solver
-        mazeWalker = new MazeWalkerHelper("examples/small.maz.txt", RightHandSolver);
-        TremauxMazeWalker = new MazeWalkerHelper("examples/small.maz.txt", TremauxSolver);
+        mazeWalker = new MazeWalkerHelper("examples/small.maz.txt", RightHandSolver, factorizedFormatter);
+        TremauxMazeWalker = new MazeWalkerHelper("examples/small.maz.txt", TremauxSolver, factorizedFormatter);
     }
 
     @Test
@@ -37,7 +45,7 @@ class MazeWalkerTest {
     @Test
     void testReadMaze_EmptyFile() {
         Exception exception = assertThrows(IllegalStateException.class, () -> {
-            new MazeWalker("examples/empty.maz.txt", RightHandSolver);
+            new MazeWalker("examples/empty.maz.txt", RightHandSolver, factorizedFormatter);
         });
         assertEquals("Maze file is empty.", exception.getMessage());
     }
@@ -82,13 +90,14 @@ class MazeWalkerTest {
     @Test
     void testFactorizePath() {
         String path = "FFFRRFF";
-        String factorized = mazeWalker.factorizePath(path);
+        List<String> pathList = Arrays.asList(path.split(""));
+        String factorized = factorizedFormatter.format(pathList);
         assertEquals("3F2R2F", factorized);
     }
 
     @Test
     void testFactorizePath_EmptyPath() {
-        String factorized = mazeWalker.factorizePath("");
+        String factorized = factorizedFormatter.format(new ArrayList<>());
         assertEquals("", factorized);
     }
 }

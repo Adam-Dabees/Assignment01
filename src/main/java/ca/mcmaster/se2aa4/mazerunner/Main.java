@@ -23,13 +23,14 @@ public class Main {
                 logger.info("**** Reading the maze from file: " + mazeFile);
                 logMazeFile(mazeFile);
 
-                Solver solver = getSolver(solverType);
+                Solver solver = SolverFactory.create(solverType);
+                
                 if (solver == null) {
                     logger.error("Invalid solver type: " + solverType);
                     return;
                 }
 
-                MazeWalker walker = new MazeWalker(mazeFile, solver);
+                MazeWalker walker = new MazeWalker(mazeFile, solver, new FactorizedFormatter());
                 String correctPath = walker.findCorrectPath();
                 
                 // Print the correct path (only necessary output)
@@ -49,7 +50,7 @@ public class Main {
 
                 // Default solver for validation (Right-Hand Rule)
                 Solver solver = new RightHandSolver(); 
-                MazeWalker walker = new MazeWalker(mazeFile, solver);
+                MazeWalker walker = new MazeWalker(mazeFile, solver, new PlainFormatter());
 
                 logger.info("**** Validating path: " + inputPath);
                 boolean isValid = walker.validatePath(inputPath);
@@ -88,13 +89,5 @@ public class Main {
         } catch (Exception e) {
             logger.error("Error reading maze file", e);
         }
-    }
-
-    private static Solver getSolver(String solverType) {
-        return switch (solverType.toLowerCase()) {
-            case "right-hand" -> new RightHandSolver();
-            case "tremaux" -> new TremauxSolver();
-            default -> null;
-        };
     }
 }

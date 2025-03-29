@@ -11,9 +11,11 @@ public class MazeWalker {
     protected int startRow = -1;
     protected int endRow = -1;
     private final Solver solver;
-
-    public MazeWalker(String filePath, Solver solver) {
+    private final PathFormatter pathFormatter;
+    
+    public MazeWalker(String filePath, Solver solver, PathFormatter pathFormatter) {
         this.solver = solver;
+        this.pathFormatter = pathFormatter;
         readMaze(filePath);
         findStartAndEndPoints();
     }
@@ -70,39 +72,7 @@ public class MazeWalker {
 
     public String findCorrectPath() {
         List<String> path = solver.solve(maze, startRow, endRow);
-        return factorizePath(String.join("", path));
-    }
-
-    protected String factorizePath(String path) {
-        if (path == null || path.isEmpty()) {
-            return "";
-        }
-
-        StringBuilder compressedPath = new StringBuilder();
-        int count = 1;
-        char prevChar = path.charAt(0);
-
-        for (int i = 1; i < path.length(); i++) {
-            char currentChar = path.charAt(i);
-            if (currentChar == prevChar) {
-                count++;
-            } else {
-                if (count > 1) {
-                    compressedPath.append(count);
-                }
-                compressedPath.append(prevChar);
-                count = 1;
-            }
-            prevChar = currentChar;
-        }
-
-        // Append the last character or its count
-        if (count > 1) {
-            compressedPath.append(count);
-        }
-        compressedPath.append(prevChar);
-
-        return compressedPath.toString();
+        return pathFormatter.format(path);
     }
 
     public boolean validatePath(String inputtedPath) {
